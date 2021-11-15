@@ -17,14 +17,14 @@ def job():
     future = datetime.date(today.year, 12, 31)
     diff = future - today
     for i in results:
-        if not i.secret_santa_id:
+        if i.secret_santa_id:
             statement = select(User).where(User.id == i.secret_santa_id)
             results = session.exec(statement)
             user = results.first()
             try:
-                updater.bot.send_message(i.id, f" \n ️  *"
-                                               f"Au mai ramas {diff.days} zile pina la anul nou,"
-                                               f"grabeste-te sa cumperi ceva pentru {user.alias} 🔥🔥"
+                updater.bot.send_message(i.id, f" \n*"
+                                               f"Au mai ramas {diff.days} zile pina la anul nou."
+                                               f"\nGrabeste-te sa cumperi ceva pentru \"{user.alias}\" 🔥🔥"
                                                f"*",
                                          parse_mode='markdown')
             except Exception as e:
@@ -32,9 +32,9 @@ def job():
 
         else:
             try:
-                updater.bot.send_message(i.id, f" \n ️  *"
-                                               f"Au mai ramas {diff.days} zile pina la anul nou,"
-                                               f"scrie-mi start pentru a seta pe cineva cu-i sa-i fii Santa  🔥🔥"
+                updater.bot.send_message(i.id, f" \n*"
+                                               f"Au mai ramas {diff.days} zile pina la anul nou. "
+                                               f"\nScrie-mi start pentru a seta pe cineva cu-i sa-i fii Santa  🔥🔥"
                                                f"*",
                                          parse_mode='markdown')
             except Exception as e:
