@@ -85,8 +85,6 @@ async def startup_event():
     # ]
 
 
-
-
 @app.post("/")
 async def root(request: Request, session: Session = Depends(get_session)):
     data = await request.json()
@@ -106,7 +104,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
     ]), User.secret_santa_id.is_(None))  # noqa
     results = session.exec(statement)
 
-    if list(results):
+    if not list(results):
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
 
     choice = random.choice(list(results))
