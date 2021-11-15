@@ -6,6 +6,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
+    networks:
+      - test
     ports:
       - "8080:8080"
     command: bash -c '
@@ -23,6 +25,8 @@ services:
       POSTGRES_USER: 'point'
       POSTGRES_PASSWORD: 'point'
       POSTGRES_DB: 'point'
+    networks:
+      - test
     expose:
       - 5438
     ports:
