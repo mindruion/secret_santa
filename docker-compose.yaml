@@ -32,6 +32,22 @@ services:
       - "-c"
       - "port=5438"
 
-
+  nginx:
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx/
+      network: host
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    restart: always
+    links:
+      - backend:backend
 volumes:
   point_data:
+  letsencrypt:
