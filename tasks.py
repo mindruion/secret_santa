@@ -26,6 +26,13 @@ def job():
                                            f"grabeste-te sa cumperi ceva pentru {user.alias} 🔥🔥"
                                            f"*",
                                      parse_mode='markdown')
+        else:
+
+            updater.bot.send_message(i.id, f" \n ️  *"
+                                           f"Au mai ramas {diff.days} zile pina la anul nou,"
+                                           f"scrie-mi start pentru a seta pe cineva cu-i sa-i fii Santa  🔥🔥"
+                                           f"*",
+                                     parse_mode='markdown')
 
 
 schedule.every().day.at("18:00").do(job)
