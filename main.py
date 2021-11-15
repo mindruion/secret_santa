@@ -93,7 +93,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
 
     if not user:
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
-        updater.bot.send_message(data['message']['chat']['id'], data)
+        return {}
 
     if user.secret_santa_id:
         statement = select(User).where(User.id == user.secret_santa_id)
@@ -101,6 +101,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
         secret_santa = results.first()
         updater.bot.send_message(user.id, f"*Esti secret santa pentru {secret_santa.alias}*",
                                  parse_mode='markdown')
+        return {}
 
     statement = select(User).where(User.id.not_in([
         data['message']['chat']['id'], user.exclude_id
@@ -109,6 +110,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
 
     if not results:
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
+        return {}
 
     choice = random.choice(results)
     user.secret_santa_id = choice.id
