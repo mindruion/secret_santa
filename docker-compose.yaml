@@ -38,3 +38,6 @@ services:
 
 volumes:
   point_data:
+
+networks:
+  test:
