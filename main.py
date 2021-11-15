@@ -83,16 +83,7 @@ async def startup_event():
     #         exclude_id=1145691161,
     #     ),
     # ]
-    session = Session(engine)
-    statement = select(User).where(User.secret_santa_id == None)  # noqa
-    results = list(session.exec(statement))
 
-    if not results:
-        updater.bot.send_message(730014397, "Intrus")
-    choice = random.choice(results)
-    updater.bot.send_message(730014397, f" \n ️  *Felicitatus domnu, esti secret santa pentru* ️⤵️⤵️ "
-                                      f" \n        🎁 \" *{choice.alias}* \" 🎁\n ",
-                             parse_mode='markdown')
 
 @app.post("/")
 async def root(request: Request, session: Session = Depends(get_session)):
@@ -103,6 +94,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
 
     if not user:
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
+        updater.bot.send_message(data['message']['chat']['id'], data)
 
     if user.secret_santa:
         updater.bot.send_message(user.id, f"*Esti secret santa pentru {user.secret_santa.alias}*",
@@ -117,7 +109,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
 
     choice = random.choice(results)
-    choice.secret_santa_id = choice.id
+    user.secret_santa_id = choice.id
     session.add(choice)
     session.commit()
     updater.bot.send_message(user.id, f" \n ️  *Felicitatus domnu, esti secret santa pentru* ️⤵️⤵️ "
