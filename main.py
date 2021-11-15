@@ -103,6 +103,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
         updater.bot.send_message(user.id, f"*Esti secret santa pentru {secret_santa.alias}*",
                                  parse_mode='markdown')
         return {}
+
     subquery = session.query(User.secret_santa_id).filter(User.secret_santa_id != None).subquery()
 
     statement = select(User).where(User.id.not_in([

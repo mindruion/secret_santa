@@ -16,6 +16,19 @@ services:
     depends_on:
       - db
 
+  backend-scheduler:
+    container_name: "backend_scheduler"
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    networks:
+      - test
+    command: bash -c '
+      python tasks.py
+      '
+    depends_on:
+      - db
+
   db:
     container_name: "database"
     image: postgres:12.0-alpine
