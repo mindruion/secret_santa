@@ -1,12 +1,28 @@
 import datetime
 import time
 
+import requests
 import schedule
 from sqlmodel import select, Session
 
 from main import updater, User, engine
 
 session = Session(engine)
+
+
+def quotes():
+    results = session.query(User).count()
+    res = requests.get(f'https://goquotes-api.herokuapp.com/api/v1/random/{results}?type=tag&val=motivational')
+    if res.status_code == 200:
+        statement = select(User)
+        users = session.exec(statement)
+        for i, u in enumerate(users):
+            updater.bot.send_message(u.id, f"\n*"
+                                           f"{res.json()['quotes'][i]['text']}"
+                                           f"*"
+                                           f"\n"
+                                           f"\nBy {res.json()['quotes'][i]['author']}",
+                                     parse_mode='markdown')
 
 
 def job():
@@ -42,6 +58,7 @@ def job():
 
 
 schedule.every().day.at("18:00").do(job)  # timezone utz (chisinau timezone is 20:00)
+schedule.every().day.at("6:00").do(quotes)  # timezone utz (chisinau timezone is 08:00)
 
 while True:
     schedule.run_pending()
