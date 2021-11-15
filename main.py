@@ -2,6 +2,7 @@ import random
 from typing import Optional
 
 from fastapi import FastAPI, Request, Depends
+from sqlalchemy.sql import Subquery
 from sqlmodel import SQLModel, create_engine, Session, select, Field
 from telegram.ext import Updater
 
@@ -102,10 +103,11 @@ async def root(request: Request, session: Session = Depends(get_session)):
         updater.bot.send_message(user.id, f"*Esti secret santa pentru {secret_santa.alias}*",
                                  parse_mode='markdown')
         return {}
+    subquery = session.query(User.secret_santa_id).filter(User.secret_santa_id != None).subquery()
 
     statement = select(User).where(User.id.not_in([
         data['message']['chat']['id'], user.exclude_id
-    ]), User.secret_santa_id.is_(None))  # noqa
+    ]), User.secret_santa_id.is_(None), User.id.not_in(subquery))  # noqa
     results = list(session.exec(statement))
 
     if not results:
