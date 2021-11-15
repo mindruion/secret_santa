@@ -2,7 +2,7 @@ import random
 from typing import Optional
 
 from fastapi import FastAPI, Request, Depends
-from sqlmodel import SQLModel, create_engine, Session, select, Field, Relationship
+from sqlmodel import SQLModel, create_engine, Session, select, Field
 from telegram.ext import Updater
 
 app = FastAPI()
@@ -13,7 +13,6 @@ class User(SQLModel, table=True):
     alias: str
     exclude_id: str
     secret_santa_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    secret_santa: "User" = Relationship()
 
 
 sqlite_url = f"postgresql://point:point@165.22.80.225:5438/point"
@@ -96,8 +95,11 @@ async def root(request: Request, session: Session = Depends(get_session)):
         updater.bot.send_message(data['message']['chat']['id'], "Intrus")
         updater.bot.send_message(data['message']['chat']['id'], data)
 
-    if user.secret_santa:
-        updater.bot.send_message(user.id, f"*Esti secret santa pentru {user.secret_santa.alias}*",
+    if user.secret_santa_id:
+        statement = select(User).where(User.id == user.secret_santa_id)
+        results = session.exec(statement)
+        secret_santa = results.first()
+        updater.bot.send_message(user.id, f"*Esti secret santa pentru {secret_santa.alias}*",
                                  parse_mode='markdown')
 
     statement = select(User).where(User.id.not_in([
