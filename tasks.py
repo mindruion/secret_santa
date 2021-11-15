@@ -17,25 +17,31 @@ def job():
     future = datetime.date(today.year, 12, 31)
     diff = future - today
     for i in results:
-        statement = select(User).where(User.secret_santa_id == i.id)
-        results = session.exec(statement)
-        user = results.first()
-        if user:
-            updater.bot.send_message(i.id, f" \n ️  *"
-                                           f"Au mai ramas {diff.days} zile pina la anul nou,"
-                                           f"grabeste-te sa cumperi ceva pentru {user.alias} 🔥🔥"
-                                           f"*",
-                                     parse_mode='markdown')
+        if not i.secret_santa_id:
+            statement = select(User).where(User.id == i.secret_santa_id)
+            results = session.exec(statement)
+            user = results.first()
+            try:
+                updater.bot.send_message(i.id, f" \n ️  *"
+                                               f"Au mai ramas {diff.days} zile pina la anul nou,"
+                                               f"grabeste-te sa cumperi ceva pentru {user.alias} 🔥🔥"
+                                               f"*",
+                                         parse_mode='markdown')
+            except Exception as e:
+                print(e)
+
         else:
+            try:
+                updater.bot.send_message(i.id, f" \n ️  *"
+                                               f"Au mai ramas {diff.days} zile pina la anul nou,"
+                                               f"scrie-mi start pentru a seta pe cineva cu-i sa-i fii Santa  🔥🔥"
+                                               f"*",
+                                         parse_mode='markdown')
+            except Exception as e:
+                print(e)
 
-            updater.bot.send_message(i.id, f" \n ️  *"
-                                           f"Au mai ramas {diff.days} zile pina la anul nou,"
-                                           f"scrie-mi start pentru a seta pe cineva cu-i sa-i fii Santa  🔥🔥"
-                                           f"*",
-                                     parse_mode='markdown')
 
-
-schedule.every().day.at("18:00").do(job)
+schedule.every().day.at("18:00").do(job)  # timezone utz (chisinau timezone is 20:00)
 
 while True:
     schedule.run_pending()
