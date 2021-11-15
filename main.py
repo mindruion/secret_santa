@@ -113,7 +113,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
     choice.secret_santa_id = choice.id
     session.add(choice)
     session.commit()
-    updater.bot.send_message(user.id, f" \n ↘️  *Felicitatus domnu, esti secret santa pentru*  ↙️ "
-                                      f" \n        🎁🎁🎁 \" *{choice.alias}* \" 🎁🎁🎁\n ",
+    updater.bot.send_message(user.id, f" \n ️  *Felicitatus domnu, esti secret santa pentru* ️⤵️⤵️ "
+                                      f" \n        🎁 \" *{choice.alias}* \" 🎁\n ",
                              parse_mode='markdown')
     return {"message": "Hello World"}
