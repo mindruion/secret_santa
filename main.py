@@ -103,7 +103,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
 
     statement = select(User).where(User.id.not_in([
         data['message']['chat']['id'], user.exclude_id
-    ]), User.secret_santa_id._is(None))  # noqa
+    ]), User.secret_santa_id.is_(None))  # noqa
     results = session.exec(statement)
 
     if list(results):
