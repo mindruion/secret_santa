@@ -10,6 +10,7 @@ RUN pip install --upgrade pip
 RUN pip install fastapi[all]
 RUN pip install uvicorn
 RUN pip install sqlmodel
+RUN pip install python-telegram-bot --upgrade
 RUN pip install psycopg2-binary
 
 COPY . /code/
