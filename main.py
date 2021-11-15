@@ -104,11 +104,10 @@ async def root(request: Request, session: Session = Depends(get_session)):
                                  parse_mode='markdown')
         return {}
 
-    subquery = session.query(User.secret_santa_id).filter(User.secret_santa_id != None).subquery()
 
     statement = select(User).where(User.id.not_in([
         data['message']['chat']['id'], user.exclude_id
-    ]), User.secret_santa_id.is_(None), User.id.not_in(subquery))  # noqa
+    ]), User.secret_santa_id.is_(None))  # noqa
     results = list(session.exec(statement))
 
     if not results:
