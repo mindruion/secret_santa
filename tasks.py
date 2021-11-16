@@ -58,7 +58,7 @@ def job():
 
 
 schedule.every().day.at("18:00").do(job)  # timezone utz (chisinau timezone is 20:00)
-schedule.every().day.at("6:00").do(quotes)  # timezone utz (chisinau timezone is 08:00)
+schedule.every().day.at("06:00").do(quotes)  # timezone utz (chisinau timezone is 08:00)
 
 while True:
     schedule.run_pending()
