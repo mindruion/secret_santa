@@ -17,12 +17,15 @@ def quotes():
         statement = select(User)
         users = session.exec(statement)
         for i, u in enumerate(users):
-            updater.bot.send_message(u.id, f"\n*"
-                                           f"{res.json()['quotes'][i]['text']}"
-                                           f"*"
-                                           f"\n"
-                                           f"\nBy {res.json()['quotes'][i]['author']}",
-                                     parse_mode='markdown')
+            try:
+                updater.bot.send_message(u.id, f"\n*"
+                                               f"{res.json()['quotes'][i]['text']}"
+                                               f"*"
+                                               f"\n"
+                                               f"\nBy {res.json()['quotes'][i]['author']}",
+                                         parse_mode='markdown')
+            except Exception as e:
+                continue
 
 
 def job():
