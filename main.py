@@ -101,7 +101,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
         results = session.exec(statement)
         secret_santa = results.first()
         updater.bot.send_message(user.id, f"*Esti secret santa pentru* [{secret_santa.alias}](tg://user?"
-                                      f"id={secret_santa.id})*",
+                                      f"id={secret_santa.id})",
                                  parse_mode='markdown')
         return {}
 
