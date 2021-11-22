@@ -43,9 +43,9 @@ def job():
             try:
                 updater.bot.send_message(i.id, f" \n*"
                                                f"Au mai ramas {diff.days} zile pina la anul nou."
-                                               f"\nGrabeste-te sa cumperi ceva pentru \"{user.alias}\" [inline mention of a user](tg://user?"
+                                               f"\nGrabeste-te sa cumperi ceva pentru* [{user.alias}](tg://user?"
                                                f"id={user.id})🔥🔥"
-                                               f"*",
+                                               f"",
                                          parse_mode='markdown')
             except Exception as e:
                 print(e)

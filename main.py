@@ -100,7 +100,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
         statement = select(User).where(User.id == user.secret_santa_id)
         results = session.exec(statement)
         secret_santa = results.first()
-        updater.bot.send_message(user.id, f"*Esti secret santa pentru {secret_santa.alias}[inline mention of a user](tg://user?"
+        updater.bot.send_message(user.id, f"*Esti secret santa pentru *[{secret_santa.alias}](tg://user?"
                                       f"id={secret_santa.id})*",
                                  parse_mode='markdown')
         return {}
@@ -121,7 +121,7 @@ async def root(request: Request, session: Session = Depends(get_session)):
     session.add(choice)
     session.commit()
     updater.bot.send_message(user.id, f" \n ️  *Felicitatus domnu, esti secret santa pentru* ️⤵️⤵️ "
-                                      f" \n        🎁 \" *{choice.alias} [inline mention of a user](tg://user?"
-                                      f"id={choice.id})* \" 🎁\n ",
+                                      f" \n        🎁 \"[{choice.alias}](tg://user?"
+                                      f"id={choice.id}) \" 🎁\n ",
                              parse_mode='markdown')
     return {"message": "Hello World"}
